@@ -2,9 +2,9 @@ LabourDB - create test DB before perform next steps
 ```sql
 CREATE DATABASE LabourDB;
 ```
-
-This is the DB project which can be deployed via VS 2019.
-It contains the two tables which automatically will be populated with data after deployment.
+The LabourDB.sqlproj can be opened via VS 2019.</br>
+It can be published into mentioned database.
+The LabourDB.sqlproj contains two tables accordingly to initial description. Also there is stored procedure which allow to generate random data and test query for the larger set than was provided in task.
 ```sql
 Timecards TABLE(	
 		ID int Identity(1,1),	
