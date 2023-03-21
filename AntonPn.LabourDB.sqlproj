@@ -68,7 +68,7 @@
     <Build Include="Views\vw_ViolatedBreakRules.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
+    <None Include="ReadMe.md" />
     <None Include="InitScriptWithSolution.sql" />
   </ItemGroup>
   <ItemGroup>
