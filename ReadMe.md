@@ -1,4 +1,7 @@
-LabourDB DEPLOYMENT.
+LabourDB - create test DB before perform next steps
+```sql
+CREATE DATABASE LabourDB;
+```
 
 This is the DB project which can be deployed via VS 2019.
 It contains the two tables which automatically will be populated with data after deployment.
