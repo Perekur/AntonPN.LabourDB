@@ -1,14 +1,33 @@
-Use VS 2019..
-Build and deploy LabourDB to the awailable mssql server.
-It will allow to generate much more bigger table TimeCards.
+LabourDB DEPLOYMENT.
 
-Perform the next query for retrieve the NumberOfNotSatisfiedRules per EmployeeId and BusinessDay
-select * from [dbo].[vw_ViolatedBreakRules]
+This is the DB project which can be deployed via VS 2019.
+It contains the two tables which automatically will be populated with data after deployment.
+```sql
+Timecards TABLE(	
+		ID int Identity(1,1),	
+		BusinessDate smalldatetime ,
+		StartDate datetime ,
+		EndDate datetime,
+		EmployeeID uniqueidentifier  	
+)
+BreakRules TABLE(	
+	ID int Identity(1,1),	
+	MinBreakMinutes int  ,
+	BreakRequiredAfter  decimal(10,2) ,
+	TakeBreakWithin  decimal(10,2) 
+)
+```
 
-In case if you are not ready to peform the previous steps.. you can run the source script
-and use next simple query.. which also should return the NumberOfNotSatisfiedRules
+The vw_ViolatedBreakRules can be used for review the **NumberOfNotSatisfiedRules**
+```sql
+    select * from [dbo].[vw_ViolatedBreakRules]
+```
 
-WITH TimeBreaksInfo AS (
+In case if you are not will be ready to download and deploy ... you can look into InitScriptWithSolution.sql
+There is a code for the query which should return the NumberOfNotSatisfiedRules based on the initialData.
+
+```sql
+`WITH TimeBreaksInfo AS (
     SELECT 
         TC.EmployeeId,
         TC.BusinessDate,
@@ -23,4 +42,5 @@ SELECT
 	NumberOfNotSatisfiedRules = (Select count(*) from @BreakRules BR where 
         (BR.BreakRequiredAfter < DATEDIFF(HOUR, tbi.CardStardDate, tbi.NextCardStartDate))
         OR (BR.MinBreakMinutes > DATEDIFF(MINUTE, tbi.CardEndDate, tbi.NextCardStartDate)))
-	FROM TimeBreaksInfo tbi 
+	FROM TimeBreaksInfo tbi `
+```
