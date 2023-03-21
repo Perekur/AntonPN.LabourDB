@@ -23,11 +23,11 @@ The vw_ViolatedBreakRules can be used for review the **NumberOfNotSatisfiedRules
     select * from [dbo].[vw_ViolatedBreakRules]
 ```
 
-In case if you are not will be ready to download and deploy ... you can look into InitScriptWithSolution.sql
-There is a code for the query which should return the NumberOfNotSatisfiedRules based on the initialData.
+In case if you are not will be ready to download and deploy ... you can use InitScriptWithSolution.sql and perform it in ManagementStudio</br>
+There is a code for the query which should return the **NumberOfNotSatisfiedRules** based on the initial script.
 
 ```sql
-`WITH TimeBreaksInfo AS (
+WITH TimeBreaksInfo AS (
     SELECT 
         TC.EmployeeId,
         TC.BusinessDate,
