@@ -3,8 +3,9 @@ LabourDB - create test DB before perform next steps
 CREATE DATABASE LabourDB;
 ```
 The LabourDB.sqlproj can be opened via VS 2019.</br>
-It can be published into mentioned database.
-The LabourDB.sqlproj contains two tables accordingly to initial description. Also there is stored procedure which allow to generate random data and test query for the larger set than was provided in task.
+It can be published into mentioned database.</br>
+The LabourDB.sqlproj contains two tables accordingly to initial description. </br>
+Also there is stored procedure which allow to generate random data and test query for the larger set than was provided in task.
 ```sql
 Timecards TABLE(	
 		ID int Identity(1,1),	
@@ -26,8 +27,9 @@ The vw_ViolatedBreakRules can be used for review the **NumberOfNotSatisfiedRules
     select * from [dbo].[vw_ViolatedBreakRules]
 ```
 
-In case if you are not will be ready to download and deploy ... you can use InitScriptWithSolution.sql and perform it in ManagementStudio</br>
-There is a code for the query which should return the **NumberOfNotSatisfiedRules** based on the initial script.
+In case if you don't wan't to deploy DB.. you can use initial script for generate fake data for couple of employees</br>
+The initial data saved in **InitScriptWithSolution.sql** so it can be opened in the ManagementStudio</br>
+The script which return the **NumberOfNotSatisfiedRules** been added to the end of the mentioned file.
 
 ```sql
 WITH TimeBreaksInfo AS (
