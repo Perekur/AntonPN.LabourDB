@@ -28,8 +28,8 @@ The vw_ViolatedBreakRules can be used for review the **NumberOfNotSatisfiedRules
 ```
 
 In case if you don't wan't to deploy DB.. you can use initial script for generate fake data for couple of employees</br>
-The initial data saved in **InitScriptWithSolution.sql** so it can be opened in the ManagementStudio</br>
-The script which return the **NumberOfNotSatisfiedRules** been added to the end of the mentioned file.
+The script was saved in **InitScriptWithSolution.sql** so it can be opened in the ManagementStudio</br>
+The query which return the  **NumberOfNotSatisfiedRules** per EmployeeId and BusinessDate you can find in the end of the mentioned file.
 
 ```sql
 WITH TimeBreaksInfo AS (
