@@ -57,7 +57,7 @@ Values(30,6,5)
 INSERT INTO @BreakRules (MinBreakMinutes ,	BreakRequiredAfter   ,	TakeBreakWithin)
 Values(30,9,9)
 INSERT INTO @BreakRules (MinBreakMinutes ,	BreakRequiredAfter   ,	TakeBreakWithin)
-Values(30,12,11)
+Values(30,12,11);
 
 
 -- query which will return not satisfied rules breakRules
