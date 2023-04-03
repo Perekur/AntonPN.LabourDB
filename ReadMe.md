@@ -30,20 +30,37 @@ The script was saved in **InitScriptWithSolution.sql** so it can be opened in th
 The query which return the  **NumberOfNotSatisfiedRules** per EmployeeId and BusinessDate you can find in the end of the mentioned file.
 
 ```sql
+-- query which will return not satisfied rules breakRules
 WITH TimeBreaksInfo AS (
     SELECT 
         TC.EmployeeId,
         TC.BusinessDate,
-		TC.StartDate as CardStardDate,
-        TC.endDate AS CardEndDate,
-        NextCardStartDate = LEAD(TC.startDate) OVER (PARTITION BY TC.EmployeeId ORDER BY TC.BusinessDate ASC, TC.startDate ASC)
+		TC.StartDate as WorkingSessionStart,
+        TC.endDate AS WorkingSessionEnd,
+        BreakDurationInMinutes = DateDiff(MINUTE, TC.EndDate, LEAD(TC.startDate) OVER (PARTITION BY TC.EmployeeId, TC.BusinessDate ORDER BY TC.startDate ASC)),
+		PrevSessionsDurationInHours = SUM(DateDiff(MINUTE, TC.StartDate, TC.endDate)/60.0) OVER (PARTITION BY TC.EmployeeId, TC.BusinessDate ORDER BY  TC.StartDate ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING),
+		LastWorkingSessionDurationInHours = DateDiff(MINUTE, TC.StartDate, TC.endDate)/60.0
     FROM @TimeCards TC
 ) 
 SELECT 
-    tbi.EmployeeId,
-    tbi.BusinessDate,
-	NumberOfNotSatisfiedRules = (Select count(*) from @BreakRules BR where 
-        (BR.BreakRequiredAfter < DATEDIFF(HOUR, tbi.CardStardDate, tbi.NextCardStartDate))
-        OR (BR.MinBreakMinutes > DATEDIFF(MINUTE, tbi.CardEndDate, tbi.NextCardStartDate)))
-	FROM TimeBreaksInfo tbi `
+	EmployeeID,
+	BusinessDate,
+	NumberOfNotSatisfiedRules = sum(violatedBreakRules.NumberOfNotSatisfiedRules)
+	FROM TimeBreaksInfo tbi CROSS APPLY
+	( 
+		select 
+			NumberOfNotSatisfiedRules = count(*)
+		from @BreakRules br 
+		where 
+			br.BreakRequiredAfter between tbi.PrevSessionsDurationInHours and (isnull(tbi.PrevSessionsDurationInHours,0) + LastWorkingSessionDurationInHours)
+			and 
+			(
+			   br.BreakRequiredAfter + TakeBreakWithin < (isnull(tbi.PrevSessionsDurationInHours,0) + LastWorkingSessionDurationInHours)
+				or
+				IsNull(BreakDurationInMinutes, MinBreakMinutes) < MinBreakMinutes
+			)
+	) violatedBreakRules
+group by EmployeeID, BusinessDate
+having sum(violatedBreakRules.NumberOfNotSatisfiedRules) > 0
+order by EmployeeID, BusinessDate
 ```
