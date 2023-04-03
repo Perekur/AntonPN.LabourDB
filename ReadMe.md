@@ -29,6 +29,9 @@ In case if you don't wan't to deploy DB.. you can use initial script for generat
 The script was saved in **InitScriptWithSolution.sql** so it can be opened in the ManagementStudio</br>
 The query which return the  **NumberOfNotSatisfiedRules** per EmployeeId and BusinessDate you can find in the end of the mentioned file.
 
+**UPDATE:** Since in previous implmentation was not taken into account **BreakRequiredAfter**.. 
+the query was changed for compliance with initial requirements.
+
 ```sql
 -- query which will return not satisfied rules breakRules
 WITH TimeBreaksInfo AS (
@@ -64,3 +67,7 @@ group by EmployeeID, BusinessDate
 having sum(violatedBreakRules.NumberOfNotSatisfiedRules) > 0
 order by EmployeeID, BusinessDate
 ```
+
+The result of executing the query is next:
+
+![NumberOfNotSatisfiedRules_Results.png ](NumberOfNotSatisfiedRules_Results.png "The result of performing query!")
