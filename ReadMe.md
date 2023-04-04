@@ -1,36 +1,14 @@
 LabourDB - create test DB before perform next steps
-```sql
-CREATE DATABASE LabourDB;
-```
-The LabourDB.sqlproj can be opened via VS 2019 and should be published into mentioned database.</br>
-It contains two tables accordingly to initial description and also there is stored procedure which allow to generate random data and test query for the larger set than was provided in the task.
-```sql
-Timecards TABLE(	
-		ID int Identity(1,1),	
-		BusinessDate smalldatetime ,
-		StartDate datetime ,
-		EndDate datetime,
-		EmployeeID uniqueidentifier  	
-)
-BreakRules TABLE(	
-	ID int Identity(1,1),	
-	MinBreakMinutes int  ,
-	BreakRequiredAfter  decimal(10,2) ,
-	TakeBreakWithin  decimal(10,2) 
-)
-```
 
-The vw_ViolatedBreakRules can be used for review the **NumberOfNotSatisfiedRules**
-```sql
-    select * from [dbo].[vw_ViolatedBreakRules]
-```
+**UPDATE:** 
+---------------
+Here the updated version of script which will show the number of violated break rules.
+Previous version was not taken into account **TakeBreakWithin**..
+**Note:** Here we assume that after N hours of work (despite on count of taken breaks) 
+employee must take the break during next T hours.
 
-In case if you don't wan't to deploy DB.. you can use initial script for generate fake data for couple of employees</br>
-The script was saved in **InitScriptWithSolution.sql** so it can be opened in the ManagementStudio</br>
-The query which return the  **NumberOfNotSatisfiedRules** per EmployeeId and BusinessDate you can find in the end of the mentioned file.
 
-**UPDATE:** Since in previous implmentation was not taken into account **BreakRequiredAfter**.. 
-the query was changed for compliance with initial requirements.
+The full code you can see in **[InitScriptWithSolution.sql](InitScriptWithSolution.sql)**
 
 ```sql
 -- query which will return not satisfied rules breakRules
@@ -71,3 +49,35 @@ order by EmployeeID, BusinessDate
 The result of executing the query is next:
 
 ![NumberOfNotSatisfiedRules_Results.png ](NumberOfNotSatisfiedRules_Results.png "The result of performing query!")
+
+**LabourDB deploy:**
+--------------------
+For the ability to test code on much larged data for the find perfomance issues
+here the project which might be deployed with auto-populate the TimeCards table.
+
+```sql
+CREATE DATABASE LabourDB;
+```
+
+The project LabourDB can be deployed to own server. Use VS2019. 
+
+```sql
+Timecards TABLE(	
+		ID int Identity(1,1),	
+		BusinessDate smalldatetime ,
+		StartDate datetime ,
+		EndDate datetime,
+		EmployeeID uniqueidentifier  	
+)
+BreakRules TABLE(	
+	ID int Identity(1,1),	
+	MinBreakMinutes int  ,
+	BreakRequiredAfter  decimal(10,2) ,
+	TakeBreakWithin  decimal(10,2) 
+)
+```
+
+The **[Views\vw_ViolatedBreakRules.sql](Views\vw_ViolatedBreakRules.sql)** can be used for review the **NumberOfNotSatisfiedRules**
+```sql
+    select * from [dbo].[vw_ViolatedBreakRules]
+```
